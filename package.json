@@ -1,0 +1,22 @@
+{
+  "name": "trending-posts-tests",
+  "version": "1.0.0",
+  "description": "Tests to run solutions against a trending posts puzzle.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamjgrant/trending-posts-tests.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamjgrant/trending-posts-tests/issues"
+  },
+  "homepage": "https://github.com/adamjgrant/trending-posts-tests#readme",
+  "devDependencies": {
+    "jest": "^27.3.1"
+  }
+}
