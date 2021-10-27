@@ -41,7 +41,9 @@ test('Top five recently trending posts does not include very old popular post', 
 
     // Take the highest static trending post and make it very old.
     // This should bump down its dynamic trending value abysmally.
-    posts[9].last_voted_on = new Date(0);
+    let a_long_time_ago = new Date(0);
+    posts[9].last_voted_on = a_long_time_ago;
+    posts[9].votes = posts[9].votes.map(v => new Vote(a_long_time_ago));
 
     const popularity_calculator = new PopularityCalculator(posts);
     const trending_ids = popularity_calculator.trending_by_quantity().map(p => [p.id, p.static_trending]);
