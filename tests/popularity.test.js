@@ -112,3 +112,29 @@ test("Everything else being equal, posts a day apart degrade in trending status"
 
     expect(trending_ids).toEqual(expected_trending_post_ids);
 });
+
+test("Posts have a maximum number of votes to be considered (10k) and the oldest are retired first", () => {
+    // Make a post with 100 votes.
+    const max = 100;
+    const post = new Post();
+    let x = 0;
+    while (x < max) {
+        post.vote();
+        x++;
+    }
+
+    // Make the first vote the oldest one.
+    let second_oldest_vote_time = post.votes[0].time;
+    let a_long_time_ago = new Date(0);
+    post.votes[0] = new Vote(a_long_time_ago);
+    post.update_static_trending();
+
+    // Now vote one more than the maximum we will hold as raw votes.
+    post.vote();
+
+    // Regardless of our efficiency in shoving off old records, the compressed voting
+    // score is just a simple number persisted to the record. That should keep incrementing.
+    expect(post.compressed_vote_count).toEqual(max + 1);
+    expect(post.votes.length).toEqual(max);
+    expect(post.votes[0].time).toEqual(second_oldest_vote_time);
+});

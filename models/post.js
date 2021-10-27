@@ -3,17 +3,27 @@ const Vote = require('./vote');
 class Post {
     constructor() {
         this.votes = [];
+        this.compressed_vote_count = 0;
         this.last_updated = Date.now();
         this.last_voted_on = undefined;
         this.id = Math.floor(Math.random() * (10 ** 20));
         this.static_trending = 0;
+        this.maximum_raw_votes = 100;
     }
 
     vote() {
         this.touch();
         this.votes.push(new Vote());
         this.last_voted_on = this.votes[this.votes.length - 1].time;
+        this.compressed_vote_count += 1;
+        this.reduce_votes_to_maximum();
         this.update_static_trending();
+    }
+
+    reduce_votes_to_maximum() {
+        if (this.votes > this.maximum_raw_votes) {
+            this.votes.shift();
+        }
     }
 
     touch() {
