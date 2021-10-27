@@ -6,7 +6,7 @@ class PopularityCalculator {
     trending_by_quantity(q = 5) {
         const grab_top_5_trending = () => {
             let posts = [...this.posts].sort((a, b) => {
-                return b.static_trending - a.static_trending;
+                return (b.static_trending - a.static_trending || b.last_updated - a.last_updated)
             }).slice(0, q);
 
             let posts_needing_updates = posts
