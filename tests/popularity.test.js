@@ -113,7 +113,7 @@ test("Everything else being equal, posts a day apart degrade in trending status"
     expect(trending_ids).toEqual(expected_trending_post_ids);
 });
 
-test("Posts have a maximum number of votes to be considered (10k) and the oldest are retired first", () => {
+test("Posts have a maximum number of votes to be considered (100) and the oldest are retired first", () => {
     // Make a post with 100 votes.
     const max = 100;
     const post = new Post();

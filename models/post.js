@@ -16,12 +16,11 @@ class Post {
         this.votes.push(new Vote());
         this.last_voted_on = this.votes[this.votes.length - 1].time;
         this.compressed_vote_count += 1;
-        this.reduce_votes_to_maximum();
         this.update_static_trending();
     }
 
     reduce_votes_to_maximum() {
-        if (this.votes > this.maximum_raw_votes) {
+        if (this.votes.length > this.maximum_raw_votes) {
             this.votes.shift();
         }
     }
@@ -32,6 +31,7 @@ class Post {
 
     update_static_trending() {
         this.touch();
+        this.reduce_votes_to_maximum();
         this.static_trending = this.votes.reduce((p, n) => p + n.weighted_value, 0);
     }
 
