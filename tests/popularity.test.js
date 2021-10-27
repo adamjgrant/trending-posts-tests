@@ -1,11 +1,6 @@
-// Classes
 const Post = require("../models/post");
 const Vote = require("../models/vote");
 const PopularityCalculator = require("../models/popularity_calculator");
-
-// Functions
-const vote = require("../functions/vote");
-const expire_votes = require("../functions/expire_votes");
 const { TestWatcher } = require("@jest/core");
 
 let fixtures = require("./fixtures");

@@ -22,6 +22,11 @@ class Post {
     expire_votes() {
         this.votes = this.votes.filter(vote => !vote.older_than_24_hours);
     }
+
+    get needs_update() {
+        const oldest_vote = this.votes[0];
+        return this.votes.length && oldest_vote.older_than_24_hours;
+    }
 }
 
 module.exports = Post;
