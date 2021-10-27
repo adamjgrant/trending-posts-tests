@@ -124,9 +124,10 @@ test("Posts have a maximum number of votes to be considered (100) and the oldest
     }
 
     // Make the first vote the oldest one.
-    let second_oldest_vote_time = post.votes[0].time;
     let a_long_time_ago = new Date(0);
+    let yesterday = new Date() - (24 * 60 * 60 * 1000);
     post.votes[0] = new Vote(a_long_time_ago);
+    post.votes[1] = new Vote(yesterday);
     post.update_static_trending();
 
     // Now vote one more than the maximum we will hold as raw votes.
@@ -136,5 +137,28 @@ test("Posts have a maximum number of votes to be considered (100) and the oldest
     // score is just a simple number persisted to the record. That should keep incrementing.
     expect(post.compressed_vote_count).toEqual(max + 1);
     expect(post.votes.length).toEqual(max);
-    expect(post.votes[0].time).toEqual(second_oldest_vote_time);
+    expect(post.votes[0].time).toEqual(yesterday);
+});
+
+test("Two posts with the same one vote each, both made today but one is slightly newer", () => {
+    const older_post = new Post();
+    const newer_post = new Post();
+
+    older_post.vote();
+    newer_post.vote();
+
+    const now = new Date();
+    const five_minutes_in_ms = (5 * 60 * 1000);
+    const five_minutes_earlier = now - five_minutes_in_ms;
+
+    newer_post.last_updated = now
+    older_post.last_updated = five_minutes_earlier;
+
+    // Set these up in the reverse expected order.
+    let posts = [older_post, newer_post];
+
+    const popularity_calculator = new PopularityCalculator(posts);
+    const trending_ids = popularity_calculator.trending_by_quantity().map(p => [p.id, p.static_trending]);
+
+    expect(trending_ids).toEqual([newer_post, older_post].map(p => [p.id, p.static_trending]))
 });
